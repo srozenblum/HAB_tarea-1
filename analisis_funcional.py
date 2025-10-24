@@ -54,7 +54,7 @@ def limpiar_texto(text, max_palabras=3):
     # Quedarse solo con las primeras N palabras
     palabras = text.split()
     if len(palabras) > max_palabras:
-        text = " ".join(palabras[:max_palabras]) + "..."
+        text = " ".join(palabras[:max_palabras])
     else:
         text = " ".join(palabras)
     return text
@@ -83,7 +83,7 @@ def graficar(enr, n_resultados=10):
     plt.figure(figsize=(10, altura))
 
     # Gráficar
-    plt.barh(df["Term"], -np.log10(df["Adjusted P-value"]), color="#1976D2")
+    plt.barh(df["Term_clean"], -np.log10(df["Adjusted P-value"]), color="#1976D2")
     plt.xlabel("-log10(Adjusted P-value)", fontsize=12)
     plt.title("Enfermedades y procesos biológicos más representados", fontsize=14, pad=15)
     plt.yticks(fontsize=10)
@@ -106,8 +106,7 @@ def main():
     genes = leer_genes(args.input)
 
     # Definir lista de bases de datos
-    databases = ['GO_Biological_Process_2021', 'KEGG_2021_Human', 'Reactome_2022', 'GO_Molecular_Function_2021',
-                'GO_Cellular_Component_2021', 'Panther_2016', 'BioCarta_2016']
+    databases = ['GO_Biological_Process_2021', 'KEGG_2021_Human', 'Reactome_2022']
 
     # Mostrar dataframe de pandas completo
     pd.set_option('display.max_columns', None)
