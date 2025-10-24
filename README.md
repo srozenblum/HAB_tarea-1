@@ -84,31 +84,6 @@ Las librerías necesarias para ejecutar el análisis se encuentran en `requireme
 gseapy
 pandas
 numpy
-matplolib.pyplot
-```
-
-Instalación rápida:
-```
-pip install -r requirements.txt
-```
-
-## 📚 Referencias
-- Subramanian et al., _Gene Set Enrichment Analysis: A knowledge-based approach for interpreting genome-wide expression profiles._ (PNAS, 2005)
-- Kanehisa et al., _KEGG: Kyoto Encyclopedia of Genes and Genomes._ (Nucleic Acids Res. 2000)
-En la cual se observa que los procesos biológicos asociados a los genes con 
-mayor nivel de significancia estadística son la fosforilación oxidativa y la termogénesis,
-y las enfermedades, miocardiopatía diabética y Parkinson.
-
-PONER GRÁFICA Y DESCRIBIRLA.
-
-## ⚙️ Dependencias
-
-Las librerías necesarias para ejecutar el análisis se encuentran en `requirements.txt`:
-
-```
-gseapy
-pandas
-numpy
 matplotlib.pyplot
 ```
 
