@@ -14,23 +14,16 @@ ____
 
 ### 📁 Bases de datos utilizadas
 
+Se utilizan las siguientes bases de datos para el análisis, que ofrecen un enfoque complementario:
+
 - **GO_Biological_Process_2021**: forma parte de la Gene Ontology (GO), una base de datos que clasifica la información sobre genes y proteínas. En este caso, describe los procesos biológicos
-en los que participan los genes, como la división celular, la respuesta inmune o la apoptosis.
+en los que participan los genes.
 
-- **GO_Molecular_Function_2021**: también parte de Gene Ontology, agrupa las funciones moleculares que desempeñan las proteínas, por ejemplo, la unión a un receptor o la actividad enzimática.
-
-- **GO_Cellular_Component_2021**: tercera categoría de Gene Ontology, que indica dónde actúan las proteínas dentro de la célula, como el núcleo, la membrana o el citoesqueleto.
-
-- **KEGG_2021_Human**: proviene del Kyoto Encyclopedia of Genes and Genomes (KEGG), una base de datos que representa las rutas metabólicas y de señalización del organismo humano, mostrando cómo interactúan los genes y proteínas dentro de sistemas biológicos
+- **KEGG_2021_Human**: proviene del Kyoto Encyclopedia of Genes and Genomes (KEGG), una base de datos que representa las rutas metabólicas y de señalización del organismo humano, mostrando cómo interactúan los genes y proteínas dentro de sistemas biológicos.
 
 - **Reactome_2022**: recopila reacciones metabólicas y vías moleculares del genoma humano, con anotaciones curadas manualmente por expertos a partir de evidencia experimental.
 
-- **Panther_2016**: parte del proyecto PANTHER (Protein ANalysis THrough Evolutionary Relationships), que clasifica genes y proteínas según su función, familia evolutiva y participación en rutas metabólicas.
-
-- **BioCarta_2016**: colección clásica de vías de señalización en humanos, que describe cómo las moléculas interactúan dentro de las células para regular procesos como el crecimiento, la inflamación o la apoptosis.
-
-> 💡 Estas bases se usan por defecto, pero pueden modificarse editando 
-la variable `databases` en el script.
+> 💡 Estas bases se usan por defecto, pero pueden modificarse editando la variable `databases` en el script.
 
 ## 📋 Estructura del repositorio
 
