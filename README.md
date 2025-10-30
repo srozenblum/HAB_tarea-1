@@ -42,6 +42,7 @@ en los que participan los genes.
 ```
 git clone https://github.com/srozenblum/HAB_tarea-1 analisis_funcional
 cd analisis_funcional
+pip install -r requirements.txt
 python analisis_funcional.py --input data/genes_input.txt --output results.txt --graficar
 ```
 
