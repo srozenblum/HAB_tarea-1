@@ -99,7 +99,7 @@ def main():
     parser = argparse.ArgumentParser(description="Análisis funcional sencillo para los genes contenidos en genes_input.txt.")
     parser.add_argument("--input", required=True, help="Ruta al archivo de entrada con una lista de genes")
     parser.add_argument("--output", required=True, help="Ruta al archivo de salida para guardar los resultados")
-    parser.add_argument("--graficar", required=True, action="store_true", default=False, help="Mostrar los resultados en un gráfico de barras")
+    parser.add_argument("--graficar", action="store_true", help="Mostrar los resultados en un gráfico de barras")
     args = parser.parse_args()
 
     # Leer archivo de genes
