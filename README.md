@@ -51,11 +51,11 @@ python analisis_funcional.py --input data/genes_input.txt --graficar
 Parámetros de ejecución:
 
 | Parámetro      | Descripción                                                                    | Opcional | Valor por defecto                                            |
-|----------------|--------------------------------------------------------------------------------|-----------|--------------------------------------------------------------|
-| `--input_file` | Ruta al archivo de texto con los genes a analizar.                             | ❌        | -                                                            |
-| `--output_dir` | Directorio raíz donde se guardarán todos los resultados del flujo.             | ❌        | `results/`                                                   |
-| `--databases`  | Bases de datos a emplear en el análisis funcional ORA (separadas por espacio). | ✅        | `GO_Biological_Process_2021, KEGG_2021_Human, Reactome_2022` |
-| `--graficar`   | Generar gráfica de barras para sintetizar los resultados.                      | ✅        | `False`                                                      |
+|----------------|--------------------------------------------------------------------------------|----------|--------------------------------------------------------------|
+| `--input_file` | Ruta al archivo de texto con los genes a analizar.                             | ❌       | -                                                            |
+| `--output_dir` | Directorio raíz donde se guardarán todos los resultados del flujo.             | ✅        | `results/`                                                   |
+| `--databases`  | Bases de datos a emplear en el análisis funcional ORA (separadas por espacio). | ✅       | `GO_Biological_Process_2021, KEGG_2021_Human, Reactome_2022` |
+| `--graficar`   | Generar gráfica de barras para sintetizar los resultados.                      | ✅       | `False`                                                      |
 
 
 ## 📊 Resultados
