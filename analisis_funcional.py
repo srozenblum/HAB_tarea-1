@@ -1,3 +1,23 @@
+"""
+Script: analisis_funcional.py
+
+Descripción:
+    Ejecuta un análisis de sobrerrepresentación génica (Over-Representation Analysis, ORA)
+    usando la herramienta Enrichr de GSEApy. Permite analizar cualquier lista de genes
+    humanos en formato HUGO contra bases de datos como GO, KEGG o Reactome, generando
+    una tabla de resultados y una visualización de las categorías más significativas.
+
+Entradas:
+    input_genes (str): ruta a un archivo de texto con los genes separados por comas
+                       o por líneas (símbolos HUGO).
+    output_dir (str): directorio donde se guardarán los resultados.
+    databases (list[str], opcional): bases de datos a usar (por defecto GO, KEGG, Reactome).
+
+Salidas:
+    resultados_ORA.csv — tabla con categorías enriquecidas y p-valores ajustados.
+    grafica_ORA.png — gráfico de barras con las categorías más significativas.
+"""
+
 import argparse
 import os
 
@@ -6,107 +26,116 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
-def leer_genes(genes_input_txt):
-    """
-    Lee un txt con con los genes y los devuelve como una lista.
-    """
 
-    with open(genes_input_txt, "r") as f:
+def leer_genes(input_genes: str) -> list[str]:
+    """
+    Lee un archivo con genes (separados por comas o saltos de línea) y devuelve una lista.
+    """
+    if not os.path.exists(input_genes):
+        raise FileNotFoundError(f"No se encontró el archivo de entrada: {input_genes}")
+
+    with open(input_genes, "r") as f:
         contenido = f.read().strip()
 
-    lista_genes = [g.strip() for g in contenido.split(",")]
-
+    # Aceptar formato separado por comas o líneas
+    lista_genes = [g.strip().upper() for g in contenido.replace(",", "\n").splitlines() if g.strip()]
+    print(f"✅ {len(lista_genes)} genes leídos desde {os.path.relpath(input_genes)}")
     return lista_genes
 
-
-def ejecutar_analisis_funcional(lista_genes, lista_dbs, output_file="resultados.csv"):
+def ejecutar_ora(
+    input_genes: str,
+    output_dir: str,
+    databases: list[str] = None
+) -> pd.DataFrame:
     """
-    Ejecuta el análisis de sobrerrepresentación (con p-valor = 0.05)
-    y guarda resultados en output_file.
-    """
+    Ejecuta un análisis de sobrerrepresentación génica (ORA) y guarda resultados y gráficos.
 
-    # Ejecutar análisis de sobrerrepresentación
+    Parámetros:
+        input_genes (str): archivo con los genes (separados por comas o líneas).
+        output_dir (str): directorio donde guardar los resultados.
+        databases (list[str], opcional): bases de datos a usar.
+
+    Retorna:
+        pd.DataFrame: tabla completa con los resultados del análisis.
+    """
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Leer genes
+    genes = leer_genes(input_genes)
+
+    # Bases de datos por defecto
+    if databases is None:
+        databases = ["GO_Biological_Process_2021", "KEGG_2021_Human", "Reactome_2022"]
+
+    print(f"🔍 Ejecutando análisis funcional ORA en {len(genes)} genes...")
     enr = gp.enrichr(
-        gene_list=lista_genes,
-        gene_sets=lista_dbs,
-        organism='Human',
-        cutoff=0.05
+        gene_list=genes,
+        gene_sets=databases,
+        organism="Human",
+        cutoff=0.05,
     )
 
-    # Guardar todos los resultados
-    output_path = os.path.join("results", output_file)
-
-    enr.results.to_csv(output_path, index=False)
-    print(f"Resultados guardados en results/{output_file}.")
-
-    # Mostrar resumen
-    print(enr.results[['Gene_set', 'Term', 'Adjusted P-value', 'Genes']].head(10))
-
-    return enr
-
-def limpiar_texto(text, max_palabras=3):
-    """
-    Limpia el texto para mejorar la visibilidad del gráfico.
-    """
-
-    # Eliminar el código (GO:xxxx)
-    text = text.split("(")[0].strip()
-    # Quedarse solo con las primeras N palabras
-    palabras = text.split()
-    if len(palabras) > max_palabras:
-        text = " ".join(palabras[:max_palabras])
-    else:
-        text = " ".join(palabras)
-    return text
-
-def graficar(enr, n_resultados=10):
-    """
-    Gráfico de barras simple con los n_resultados por valor P ajustado.
-    """
-
-    df = enr.results.copy()
+    df = enr.results
     if df.empty:
-        print("⚠️ No hay términos para graficar.")
-        return
+        print("⚠️ No se encontraron términos significativos.")
+        return df
 
-    # Tomar los n_resultados ordenados por valor P ajustado
+    # Guardar resultados
+    output_csv = os.path.join(output_dir, "enrichment_results.csv")
+    df.to_csv(output_csv, index=False)
+    print(f"✅ Resultados guardados en {os.path.relpath(output_csv)}")
+
+    # Graficar top resultados
+    graficar_resultados(df, output_dir, 10)
+    return df
+
+
+def limpiar_texto(text: str, max_palabras: int = 3) -> str:
+    """
+    Limpia texto de etiquetas GO y reduce longitud para el gráfico.
+    """
+    text = text.split("(")[0].strip()
+    palabras = text.split()
+    return " ".join(palabras[:max_palabras])
+
+
+def graficar_resultados(df: pd.DataFrame, output_dir: str, n_resultados: int = 10) -> None:
+    """
+    Genera un gráfico de barras de los n_resultados más significativos.
+    """
     df = df.sort_values("Adjusted P-value").head(n_resultados)
-
-    # Revertir el orden para que el más significativo quede arriba
-    df = df.iloc[::-1]
-
-    # Formatear etiquetas
+    df = df.iloc[::-1].copy()
     df["Term_clean"] = df["Term"].apply(limpiar_texto)
 
-    # Tamaño dinámico
-    altura = 0.6 * len(df)
-    plt.figure(figsize=(10, altura))
-
-    # Gráficar
+    plt.figure(figsize=(10, 0.6 * len(df)))
     plt.barh(df["Term_clean"], -np.log10(df["Adjusted P-value"]), color="#1976D2")
     plt.xlabel("-log10(Adjusted P-value)", fontsize=12)
-    plt.title("Enfermedades y procesos biológicos más representados", fontsize=14, pad=15)
-    plt.yticks(fontsize=10)
-    plt.xticks(fontsize=10)
+    plt.title("Categorías más representadas", fontsize=14, pad=15)
     plt.tight_layout()
 
-    # Guardar gráfica en /results
-    output_path = os.path.join("results", "grafica_resultados.png")
-    plt.savefig(output_path)
+    output_png = os.path.join(output_dir, "enrichment_plot.png")
+    plt.savefig(output_png)
+    plt.close()
+    print(f"📊 Gráfico guardado en {os.path.relpath(output_png)}")
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Análisis funcional sencillo para los genes contenidos en genes_input.txt.")
-    parser.add_argument("--input", required=True, help="Ruta al archivo de entrada con una lista de genes")
-    parser.add_argument("--output", required=True, help="Ruta al archivo de salida para guardar los resultados")
-    parser.add_argument("--graficar", action="store_true", help="Mostrar los resultados en un gráfico de barras")
+# === Ejecución directa ===
+if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Análisis funcional genérico (ORA).")
+    parser.add_argument("--input", default="data/genes_input.txt", help="Archivo con genes de entrada (txt con comas o líneas).")
+    parser.add_argument("--output", default="results", help="Directorio de salida.")
+    parser.add_argument("--databases", nargs="+", default=["GO_Biological_Process_2021", "KEGG_2021_Human", "Reactome_2022"],
+                        help="Bases de datos a usar para el análisis (separadas por espacio).")
+    parser.add_argument("--graficar", action="store_true",
+                        help="Generar gráfica de barras.")
     args = parser.parse_args()
+
+    ejecutar_ora(input_genes=args.input, output_dir=args.output, databases=args.databases)
 
     # Leer archivo de genes
     genes = leer_genes(args.input)
-
-    # Definir lista de bases de datos
-    databases = ['GO_Biological_Process_2021', 'KEGG_2021_Human', 'Reactome_2022']
 
     # Mostrar dataframe de pandas completo
     pd.set_option('display.max_columns', None)
@@ -114,10 +143,7 @@ def main():
     pd.set_option('display.max_colwidth', None)
 
     # Ejecutar el análisis
-    enr = ejecutar_analisis_funcional(genes, databases, output_file=args.output)
+    enr = ejecutar_ora(input_genes=args.input, output_dir=args.output, databases=args.databases)
 
     if args.graficar:
-        graficar(enr)
-
-if __name__ == "__main__":
-    main()
+        graficar_resultados(df=enr, output_dir=args.output)
