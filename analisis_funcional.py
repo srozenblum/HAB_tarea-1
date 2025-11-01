@@ -124,7 +124,7 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Análisis funcional genérico (ORA).")
-    parser.add_argument("--input", default="data/genes_input.txt", help="Archivo con genes de entrada (txt con comas o líneas).")
+    parser.add_argument("--input", help="Archivo con genes de entrada (txt con comas o líneas).")
     parser.add_argument("--output", default="results", help="Directorio de salida.")
     parser.add_argument("--databases", nargs="+", default=["GO_Biological_Process_2021", "KEGG_2021_Human", "Reactome_2022"],
                         help="Bases de datos a usar para el análisis (separadas por espacio).")
