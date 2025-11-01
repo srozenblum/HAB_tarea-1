@@ -1,7 +1,7 @@
 
 # 💻 🧬 Tarea 1: Análisis funcional de genes
 
-Este proyecto propone un análisis funcional de los genes **COX4I2**, **ND1** y **ATP6** mediante un análisis de sobrerrepresentación.
+Este proyecto propone un análisis funcional de sobrerrepresentación (**ORA**, _Over-Representation Analysis_) de los genes **COX4I2**, **ND1** y **ATP6**.
 Este tipo de análisis estadístico busca determinar si ciertos genes aparecen con mayor frecuencia dentro de una categoría funcional específica (por ejemplo, un proceso biológico, una vía metabólica o una enfermedad) de lo que cabría esperar por azar.
 Para ello, se emplea la prueba exacta de Fisher, una herramienta estadística que evalúa si existe una asociación significativa entre dos variables categóricas —en este caso, los genes de interés y las categorías funcionales a las que pertenecen—.
 Se utiliza un nivel de significancia convencional de _p_ < 0.05, lo que significa que valores menores a ese umbral indican una asociación estadísticamente significativa, es decir, que la aparición de esos genes en dicha categoría no sería producto del azar, sino que podría reflejar una relación biológica real.
@@ -23,7 +23,7 @@ en los que participan los genes.
 
 - **Reactome_2022**: recopila reacciones metabólicas y vías moleculares del genoma humano, con anotaciones curadas manualmente por expertos a partir de evidencia experimental.
 
-> 💡 Estas bases se usan por defecto, pero pueden modificarse editando la variable `databases` en el script.
+> 💡 Estas bases se usan por defecto, pero pueden modificarse con el parámetro de ejecución `--databases`.
 
 ## 📁 Estructura del repositorio
 
@@ -31,39 +31,43 @@ en los que participan los genes.
 /analisis-funcional/
 ├── data/
 │   └── genes_input.txt        # Genes de entrada del análisis
-├── analisis_funcional.py  # Script que ejecuta el análisis funcional
+├── analisis_funcional.py      # Script que ejecuta el análisis funcional
 ├── results/                   # Resultados generados por el script
 ├── README.md                  
-└── requirements.txt           # Dependencias del proyecto
+└── requirements.txt           
 ```
 
 ## 🚀 Manual de uso
+
+Clonar el repositorio y ejecutar el script principal:
 
 ```
 git clone https://github.com/srozenblum/HAB_tarea-1 analisis_funcional
 cd analisis_funcional
 pip install -r requirements.txt
-python analisis_funcional.py --input data/genes_input.txt --output results.txt --graficar
+python analisis_funcional.py --input data/genes_input.txt --graficar
 ```
 
 Parámetros de ejecución:
 
-`--input`: archivo de texto con los genes a analizar.
+| Parámetro      | Descripción                                                                    | Opcional | Valor por defecto                                            |
+|----------------|--------------------------------------------------------------------------------|-----------|--------------------------------------------------------------|
+| `--input_file` | Ruta al archivo de texto con los genes a analizar.                             | ❌        | -                                                            |
+| `--output_dir` | Directorio raíz donde se guardarán todos los resultados del flujo.             | ❌        | `results/`                                                   |
+| `--databases`  | Bases de datos a emplear en el análisis funcional ORA (separadas por espacio). | ✅        | `GO_Biological_Process_2021, KEGG_2021_Human, Reactome_2022` |
+| `--graficar`   | Generar gráfica de barras para sintetizar los resultados.                      | ✅        | `False`                                                      |
 
-`--output`: directorio donde se guardarán los resultados.
-
-`--graficar`: generar una figura resumen de los resultados (opcional).
 
 ## 📊 Resultados
 
 Los resultados se guardan automáticamente en el directorio especificado mediante el parámetro `--output_dir` (por defecto, `results/`) e incluyen:
 
-- `results.txt`:  tabla con las categorías funcionales enriquecidas, sus _p_-valores y los genes asociados.
-- `grafica_resultados.png`: gráfica de resumen de las categorías más significativas (opcional, generado con `--graficar`).
+- `enrichment_results.csv`:  tabla con las categorías funcionales enriquecidas, sus _p_-valores y los genes asociados.
+- `enrichment_plot.png`: gráfica de barras que resume las categorías más significativas (opcional, generado con `--graficar`).
 
 Por ejemplo, para la ejecución con los parámetros por defecto se obtiene la siguiente gráfica:
 
-![Gráfico de términos enriquecidos](results/grafica_resultados.png)
+![Gráfico de términos enriquecidos](results/enrichment_plot.png)
 
 En la gráfica se muestran los procesos biológicos más representados entre los genes analizados.
 En el eje horizontal se observa la significancia estadística (valor de _p_ ajustado en escala logarítmica), donde barras más largas indican asociaciones más fuertes.
