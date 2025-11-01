@@ -1,5 +1,5 @@
 
-# 💻 🧬 Tarea 1: Análisis Funcional de genes
+# 💻 🧬 Tarea 1: Análisis funcional de genes
 
 Este proyecto propone un análisis funcional de los genes **COX4I2**, **ND1** y **ATP6** mediante un análisis de sobrerrepresentación.
 Este tipo de análisis estadístico busca determinar si ciertos genes aparecen con mayor frecuencia dentro de una categoría funcional específica (por ejemplo, un proceso biológico, una vía metabólica o una enfermedad) de lo que cabría esperar por azar.
@@ -12,7 +12,7 @@ para identificar procesos biológicos, funciones moleculares y enfermedades asoc
 
 ____
 
-### 📁 Bases de datos utilizadas
+### 🔍 Bases de datos utilizadas
 
 Se utilizan las siguientes bases de datos para el análisis, que ofrecen un enfoque complementario:
 
@@ -25,7 +25,7 @@ en los que participan los genes.
 
 > 💡 Estas bases se usan por defecto, pero pueden modificarse editando la variable `databases` en el script.
 
-## 📋 Estructura del repositorio
+## 📁 Estructura del repositorio
 
 ```
 /analisis-funcional/
@@ -52,14 +52,14 @@ Parámetros de ejecución:
 
 `--output`: directorio donde se guardarán los resultados.
 
-`--graficar`: genera una figura resumen de los resultados (opcional).
+`--graficar`: generar una figura resumen de los resultados (opcional).
 
 ## 📊 Resultados
 
-Los resultados se guardan en la carpeta `results/` e incluyen:
+Los resultados se guardan automáticamente en el directorio especificado mediante el parámetro `--output_dir` (por defecto, `results/`) e incluyen:
 
 - `results.txt`:  tabla con las categorías funcionales enriquecidas, sus _p_-valores y los genes asociados.
-- `grafica_resultados.png`: Gráfico de resumen de las categorías más significativas (opcional, generado con `--graficar`).
+- `grafica_resultados.png`: gráfica de resumen de las categorías más significativas (opcional, generado con `--graficar`).
 
 Por ejemplo, para la ejecución con los parámetros por defecto se obtiene la siguiente gráfica:
 
