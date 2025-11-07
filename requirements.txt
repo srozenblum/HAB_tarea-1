@@ -1,5 +1,6 @@
-gseapy
-pandas
-numpy
-matplotlib.pyplot
-
+gseapy==1.1.10
+matplotlib==3.9.2
+matplotlib-inline==0.1.7
+matplotlib-venn==1.1.2
+numpy==1.26.4
+pandas==2.2.3
